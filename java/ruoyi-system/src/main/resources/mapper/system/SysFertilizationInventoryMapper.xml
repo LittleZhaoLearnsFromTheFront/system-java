@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.SysFertilizationInventoryMapper">
+    
+    <resultMap type="SysFertilizationInventory" id="SysFertilizationInventoryResult">
+        <result property="id"    column="id"    />
+        <result property="title"    column="title"    />
+        <result property="quantity"    column="quantity"    />
+        <result property="unit"    column="unit"    />
+        <result property="remainingQuantity"    column="remaining_quantity"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="createBy"    column="create_by"    />
+    </resultMap>
+
+    <sql id="selectSysFertilizationInventoryVo">
+        select id, title, quantity, unit, remaining_quantity, create_time, update_time, create_by from sys_fertilization_inventory
+    </sql>
+
+    <select id="selectSysFertilizationInventoryList" parameterType="SysFertilizationInventory" resultMap="SysFertilizationInventoryResult">
+        <include refid="selectSysFertilizationInventoryVo"/>
+        <where>  
+            <if test="title != null  and title != ''"> and title like concat('%', #{title}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectSysFertilizationInventoryById" parameterType="Long" resultMap="SysFertilizationInventoryResult">
+        <include refid="selectSysFertilizationInventoryVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertSysFertilizationInventory" parameterType="SysFertilizationInventory" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_fertilization_inventory
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null and title != ''">title,</if>
+            <if test="quantity != null">quantity,</if>
+            <if test="unit != null and unit != ''">unit,</if>
+            <if test="quantity != null">remaining_quantity,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="createBy != null">create_by,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null and title != ''">#{title},</if>
+            <if test="quantity != null">#{quantity},</if>
+            <if test="unit != null and unit != ''">#{unit},</if>
+            <if test="quantity != null">#{quantity},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysFertilizationInventory" parameterType="SysFertilizationInventory">
+        update sys_fertilization_inventory
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="quantity != null">quantity = #{quantity},</if>
+            <if test="unit != null and unit != ''">unit = #{unit},</if>
+            <if test="remainingQuantity != null">remaining_quantity = #{remainingQuantity},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSysFertilizationInventoryById" parameterType="Long">
+        delete from sys_fertilization_inventory where id = #{id}
+    </delete>
+
+    <delete id="deleteSysFertilizationInventoryByIds" parameterType="String">
+        delete from sys_fertilization_inventory where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

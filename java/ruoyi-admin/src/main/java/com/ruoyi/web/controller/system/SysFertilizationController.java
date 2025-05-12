@@ -1,7 +1,10 @@
-package com.ruoyi.system.controller;
+package com.ruoyi.web.controller.system;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import com.ruoyi.system.domain.SysFertilizationInventory;
+import com.ruoyi.system.service.ISysFertilizationInventoryService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,6 +36,9 @@ public class SysFertilizationController extends BaseController
 {
     @Autowired
     private ISysFertilizationService sysFertilizationService;
+
+    @Autowired
+    private ISysFertilizationInventoryService sysFertilizationInventoryService;
 
     /**
      * 查询施肥列表
@@ -78,6 +84,12 @@ public class SysFertilizationController extends BaseController
     public AjaxResult add(@RequestBody SysFertilization sysFertilization)
     {
         sysFertilization.setCreateBy(getUsername());
+        SysFertilizationInventory nowInventory=sysFertilizationInventoryService.selectSysFertilizationInventoryById(sysFertilization.getFertilizationInventoryId());;
+        if(nowInventory.getRemainingQuantity()<sysFertilization.getDosage()){
+            return AjaxResult.error("库存不足");
+        }
+        nowInventory.setRemainingQuantity(nowInventory.getRemainingQuantity()-sysFertilization.getDosage());
+        sysFertilizationInventoryService.updateSysFertilizationInventory(nowInventory);
         return toAjax(sysFertilizationService.insertSysFertilization(sysFertilization));
     }
 
