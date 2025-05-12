@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.SysWateringMapper">
+    
+    <resultMap type="SysWatering" id="SysWateringResult">
+        <result property="id"    column="id"    />
+        <result property="landId"    column="land_id"    />
+        <result property="landName" column="land_name"/>
+        <result property="time"    column="time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="owner"    column="owner"    />
+    </resultMap>
+
+    <sql id="selectSysWateringVo">
+        select sys_watering.id, sys_watering.land_id,sys_land.name as land_name, sys_watering.time,sys_watering.create_by, sys_watering.create_time, sys_watering.update_time, sys_watering.owner
+        from sys_watering
+        LEFT JOIN sys_land ON sys_watering.land_id=sys_land.id
+    </sql>
+
+    <select id="selectSysWateringList" parameterType="SysWatering" resultMap="SysWateringResult">
+        <include refid="selectSysWateringVo"/>
+        <where>  
+            <if test="landId != null "> and land_id = #{landId}</if>
+            <if test="time != null "> and time = #{time}</if>
+            <if test="owner != null  and owner != ''"> and owner = #{owner}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysWateringById" parameterType="Long" resultMap="SysWateringResult">
+        <include refid="selectSysWateringVo"/>
+        where sys_watering.id = #{id}
+    </select>
+
+    <insert id="insertSysWatering" parameterType="SysWatering" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_watering
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="landId != null">land_id,</if>
+            <if test="time != null">time,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="owner != null and owner != ''">owner,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="landId != null">#{landId},</if>
+            <if test="time != null">#{time},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="owner != null and owner != ''">#{owner},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysWatering" parameterType="SysWatering">
+        update sys_watering
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="landId != null">land_id = #{landId},</if>
+            <if test="time != null">time = #{time},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="owner != null and owner != ''">owner = #{owner},</if>
+        </trim>
+        where sys_watering.id = #{id}
+    </update>
+
+    <delete id="deleteSysWateringById" parameterType="Long">
+        delete from sys_watering where id = #{id}
+    </delete>
+
+    <delete id="deleteSysWateringByIds" parameterType="String">
+        delete from sys_watering where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
