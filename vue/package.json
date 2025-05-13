@@ -1,8 +1,8 @@
 {
   "name": "hanxiao.zhao",
   "version": "3.8.9",
-  "description": "弥胡桃园管理系统",
-  "author": "弥胡桃园",
+  "description": "猕猴桃园管理系统",
+  "author": "猕猴桃园",
   "license": "MIT",
   "scripts": {
     "dev": "vue-cli-service serve",

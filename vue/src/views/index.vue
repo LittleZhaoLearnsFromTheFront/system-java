@@ -1,5 +1,5 @@
 <template>
-  <div class="title">弥胡桃园管理系统</div>
+  <div class="title">猕猴桃园管理系统</div>
 </template>
 
 <style>
