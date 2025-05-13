@@ -8,6 +8,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="id"    column="id"    />
         <result property="landId"    column="land_id"    />
         <result property="landName"    column="land_name"    />
+        <result property="fertilizationInventoryId"    column="fertilization_inventory_id"    />
+        <result property="fertilizationInventoryName"    column="fertilization_inventory_name"    />
+        <result property="unit"    column="unit"    />
         <result property="owner"    column="owner"    />
         <result property="time"    column="time"    />
         <result property="createTime"    column="create_time"    />
@@ -18,8 +21,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectSysFertilizationVo">
-        select a.id, a.land_id,b.name as land_name, a.owner, a.time, a.create_time, a.update_time, a.create_by, a.dosage, a.remark from sys_fertilization a
+        select a.id, a.land_id,b.name as land_name, a.owner, a.time, a.create_time, a.update_time, a.create_by, a.dosage, a.remark,a.fertilization_inventory_id,c.title as fertilization_inventory_name,c.unit  from sys_fertilization a
         LEFT JOIN sys_land b ON  a.land_id=b.id
+        LEFT JOIN sys_fertilization_inventory c ON a.fertilization_inventory_id=c.id
     </sql>
 
     <select id="selectSysFertilizationList" parameterType="SysFertilization" resultMap="SysFertilizationResult">
@@ -48,6 +52,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createBy != null">create_by,</if>
             <if test="dosage != null and dosage != ''">dosage,</if>
             <if test="remark != null">remark,</if>
+            <if test="fertilizationInventoryId != null">fertilization_inventory_id,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="landId != null">#{landId},</if>
@@ -58,6 +63,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createBy != null">#{createBy},</if>
             <if test="dosage != null and dosage != ''">#{dosage},</if>
             <if test="remark != null">#{remark},</if>
+            <if test="fertilizationInventoryId != null">#{fertilizationInventoryId},</if>
          </trim>
     </insert>
 

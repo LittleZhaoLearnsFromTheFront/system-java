@@ -58,4 +58,5 @@ public interface SysFertilizationMapper
      * @return 结果
      */
     public int deleteSysFertilizationByIds(Long[] ids);
+
 }

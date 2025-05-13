@@ -25,6 +25,15 @@ public class SysFertilization extends BaseEntity
     @Excel(name = "土地名称")
     private String landName;
 
+    @Excel(name = "库存Id")
+    private Long fertilizationInventoryId;
+
+    @Excel(name="库存名称")
+    private String fertilizationInventoryName;
+
+    @Excel(name="单位")
+    private  String unit;
+
     /** 施肥人 */
     @Excel(name = "施肥人")
     private String owner;
@@ -35,7 +44,7 @@ public class SysFertilization extends BaseEntity
 
     /** 用量 */
     @Excel(name = "用量")
-    private String dosage;
+    private Long dosage;
 
     public void setId(Long id) 
     {
@@ -67,6 +76,36 @@ public class SysFertilization extends BaseEntity
         return landName;
     }
 
+    public void setFertilizationInventoryId(Long fertilizationInventoryId)
+    {
+        this.fertilizationInventoryId = fertilizationInventoryId;
+    }
+
+    public Long getFertilizationInventoryId()
+    {
+        return fertilizationInventoryId;
+    }
+
+    public  void setFertilizationInventoryName(String fertilizationInventoryName)
+    {
+        this.fertilizationInventoryName = fertilizationInventoryName;
+    }
+
+    public  String getFertilizationInventoryName()
+    {
+        return fertilizationInventoryName;
+    }
+
+    public void setUnit(String unit)
+    {
+        this.unit = unit;
+    }
+
+    public  String getUnit()
+    {
+        return unit;
+    }
+
     public void setOwner(String owner) 
     {
         this.owner = owner;
@@ -87,12 +126,12 @@ public class SysFertilization extends BaseEntity
         return time;
     }
 
-    public void setDosage(String dosage) 
+    public void setDosage(Long dosage)
     {
         this.dosage = dosage;
     }
 
-    public String getDosage() 
+    public Long getDosage()
     {
         return dosage;
     }
@@ -103,6 +142,9 @@ public class SysFertilization extends BaseEntity
             .append("id", getId())
             .append("landId", getLandId())
                 .append("landName", getLandName())
+                .append("fertilizationInventoryId", getFertilizationInventoryId())
+                .append("fertilizationInventoryName", getFertilizationInventoryName())
+                .append("unit", getUnit())
             .append("owner", getOwner())
             .append("time", getTime())
             .append("createTime", getCreateTime())
