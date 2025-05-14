@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.SysOriginMapper">
+    
+    <resultMap type="SysOrigin" id="SysOriginResult">
+        <result property="originId"    column="origin_id"    />
+        <result property="originName"    column="origin_name"    />
+        <result property="regionCode"    column="region_code"    />
+        <result property="climateZone"    column="climate_zone"    />
+        <result property="maxAltitude"    column="max_altitude"    />
+        <result property="minAltitude"    column="min_altitude"    />
+        <result property="altitude"    column="altitude"    />
+        <result property="slope"    column="slope"    />
+        <result property="terrainType"    column="terrain_type"    />
+        <result property="acreage"    column="acreage"    />
+        <result property="mainVarieties"    column="main_varieties"    />
+        <result property="maxTemperature"    column="max_temperature"    />
+        <result property="minTemperature"    column="min_temperature"    />
+        <result property="avgTemperature"    column="avg_temperature"    />
+        <result property="minPrecipitation"    column="min_precipitation"    />
+        <result property="maxPrecipitation"    column="max_precipitation"    />
+        <result property="precipitation"    column="precipitation"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectSysOriginVo">
+        select origin_id, origin_name, region_code, climate_zone, max_altitude, min_altitude, altitude, slope, terrain_type, acreage, main_varieties, max_temperature, min_temperature, avg_temperature, min_precipitation, max_precipitation, precipitation, create_by, create_time, update_by, update_time, remark from sys_origin
+    </sql>
+
+    <select id="selectSysOriginList" parameterType="SysOrigin" resultMap="SysOriginResult">
+        <include refid="selectSysOriginVo"/>
+        <where>  
+            <if test="originName != null  and originName != ''"> and origin_name like concat('%', #{originName}, '%')</if>
+            <if test="regionCode != null  and regionCode != ''"> and region_code = #{regionCode}</if>
+            <if test="climateZone != null  and climateZone != ''"> and climate_zone = #{climateZone}</if>
+            <if test="maxAltitude != null "> and max_altitude = #{maxAltitude}</if>
+            <if test="minAltitude != null "> and min_altitude = #{minAltitude}</if>
+            <if test="altitude != null "> and altitude = #{altitude}</if>
+            <if test="slope != null "> and slope = #{slope}</if>
+            <if test="terrainType != null "> and terrain_type = #{terrainType}</if>
+            <if test="acreage != null "> and acreage = #{acreage}</if>
+            <if test="mainVarieties != null  and mainVarieties != ''"> and main_varieties = #{mainVarieties}</if>
+            <if test="maxTemperature != null "> and max_temperature = #{maxTemperature}</if>
+            <if test="minTemperature != null "> and min_temperature = #{minTemperature}</if>
+            <if test="avgTemperature != null "> and avg_temperature = #{avgTemperature}</if>
+            <if test="minPrecipitation != null "> and min_precipitation = #{minPrecipitation}</if>
+            <if test="maxPrecipitation != null "> and max_precipitation = #{maxPrecipitation}</if>
+            <if test="precipitation != null "> and precipitation = #{precipitation}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysOriginByOriginId" parameterType="Long" resultMap="SysOriginResult">
+        <include refid="selectSysOriginVo"/>
+        where origin_id = #{originId}
+    </select>
+
+    <insert id="insertSysOrigin" parameterType="SysOrigin" useGeneratedKeys="true" keyProperty="originId">
+        insert into sys_origin
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="originName != null">origin_name,</if>
+            <if test="regionCode != null">region_code,</if>
+            <if test="climateZone != null">climate_zone,</if>
+            <if test="maxAltitude != null">max_altitude,</if>
+            <if test="minAltitude != null">min_altitude,</if>
+            <if test="altitude != null">altitude,</if>
+            <if test="slope != null">slope,</if>
+            <if test="terrainType != null">terrain_type,</if>
+            <if test="acreage != null">acreage,</if>
+            <if test="mainVarieties != null">main_varieties,</if>
+            <if test="maxTemperature != null">max_temperature,</if>
+            <if test="minTemperature != null">min_temperature,</if>
+            <if test="avgTemperature != null">avg_temperature,</if>
+            <if test="minPrecipitation != null">min_precipitation,</if>
+            <if test="maxPrecipitation != null">max_precipitation,</if>
+            <if test="precipitation != null">precipitation,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="originName != null">#{originName},</if>
+            <if test="regionCode != null">#{regionCode},</if>
+            <if test="climateZone != null">#{climateZone},</if>
+            <if test="maxAltitude != null">#{maxAltitude},</if>
+            <if test="minAltitude != null">#{minAltitude},</if>
+            <if test="altitude != null">#{altitude},</if>
+            <if test="slope != null">#{slope},</if>
+            <if test="terrainType != null">#{terrainType},</if>
+            <if test="acreage != null">#{acreage},</if>
+            <if test="mainVarieties != null">#{mainVarieties},</if>
+            <if test="maxTemperature != null">#{maxTemperature},</if>
+            <if test="minTemperature != null">#{minTemperature},</if>
+            <if test="avgTemperature != null">#{avgTemperature},</if>
+            <if test="minPrecipitation != null">#{minPrecipitation},</if>
+            <if test="maxPrecipitation != null">#{maxPrecipitation},</if>
+            <if test="precipitation != null">#{precipitation},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysOrigin" parameterType="SysOrigin">
+        update sys_origin
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="originName != null">origin_name = #{originName},</if>
+            <if test="regionCode != null">region_code = #{regionCode},</if>
+            <if test="climateZone != null">climate_zone = #{climateZone},</if>
+            <if test="maxAltitude != null">max_altitude = #{maxAltitude},</if>
+            <if test="minAltitude != null">min_altitude = #{minAltitude},</if>
+            <if test="altitude != null">altitude = #{altitude},</if>
+            <if test="slope != null">slope = #{slope},</if>
+            <if test="terrainType != null">terrain_type = #{terrainType},</if>
+            <if test="acreage != null">acreage = #{acreage},</if>
+            <if test="mainVarieties != null">main_varieties = #{mainVarieties},</if>
+            <if test="maxTemperature != null">max_temperature = #{maxTemperature},</if>
+            <if test="minTemperature != null">min_temperature = #{minTemperature},</if>
+            <if test="avgTemperature != null">avg_temperature = #{avgTemperature},</if>
+            <if test="minPrecipitation != null">min_precipitation = #{minPrecipitation},</if>
+            <if test="maxPrecipitation != null">max_precipitation = #{maxPrecipitation},</if>
+            <if test="precipitation != null">precipitation = #{precipitation},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where origin_id = #{originId}
+    </update>
+
+    <delete id="deleteSysOriginByOriginId" parameterType="Long">
+        delete from sys_origin where origin_id = #{originId}
+    </delete>
+
+    <delete id="deleteSysOriginByOriginIds" parameterType="String">
+        delete from sys_origin where origin_id in 
+        <foreach item="originId" collection="array" open="(" separator="," close=")">
+            #{originId}
+        </foreach>
+    </delete>
+</mapper>

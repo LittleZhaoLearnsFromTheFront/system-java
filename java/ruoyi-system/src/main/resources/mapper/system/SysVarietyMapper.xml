@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.SysVarietyMapper">
+    
+    <resultMap type="SysVariety" id="SysVarietyResult">
+        <result property="varietyId"    column="variety_id"    />
+        <result property="varietyName"    column="variety_name"    />
+        <result property="scientificName"    column="scientific_name"    />
+        <result property="varietyType"    column="variety_type"    />
+        <result property="breedingYear"    column="breeding_year"    />
+        <result property="fruitShape"    column="fruit_shape"    />
+        <result property="fruitSize"    column="fruit_size"    />
+        <result property="averageWeight"    column="average_weight"    />
+        <result property="skinColor"    column="skin_color"    />
+        <result property="diseaseResistance"    column="disease_resistance"    />
+        <result property="insectResistance"    column="insect_resistance"    />
+        <result property="growthVigor"    column="growth_vigor"    />
+        <result property="pestControlMeasures"    column="pest_control_measures"    />
+        <result property="originId"    column="origin_id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+        <result property="originName"    column="origin_name"    />
+    </resultMap>
+
+    <sql id="selectSysVarietyVo">
+        select variety_id, variety_name, scientific_name, variety_type, breeding_year, fruit_shape, fruit_size, average_weight, skin_color, disease_resistance, insect_resistance, growth_vigor, pest_control_measures, sys_variety.origin_id, sys_variety.create_by, sys_variety.create_time, sys_variety.update_by, sys_variety.update_time, sys_variety.remark, origin_name from sys_variety
+        LEFT JOIN sys_origin ON sys_origin.origin_id = sys_variety.origin_id
+    </sql>
+
+    <select id="selectSysVarietyList" parameterType="SysVariety" resultMap="SysVarietyResult">
+        <include refid="selectSysVarietyVo"/>
+        <where>  
+            <if test="varietyName != null  and varietyName != ''"> and variety_name like concat('%', #{varietyName}, '%')</if>
+            <if test="scientificName != null  and scientificName != ''"> and scientific_name like concat('%', #{scientificName}, '%')</if>
+            <if test="varietyType != null  and varietyType != ''"> and variety_type = #{varietyType}</if>
+            <if test="breedingYear != null "> and breeding_year = #{breedingYear}</if>
+            <if test="fruitShape != null  and fruitShape != ''"> and fruit_shape = #{fruitShape}</if>
+            <if test="fruitSize != null  and fruitSize != ''"> and fruit_size = #{fruitSize}</if>
+            <if test="averageWeight != null "> and average_weight = #{averageWeight}</if>
+            <if test="skinColor != null  and skinColor != ''"> and skin_color = #{skinColor}</if>
+            <if test="diseaseResistance != null  and diseaseResistance != ''"> and disease_resistance = #{diseaseResistance}</if>
+            <if test="insectResistance != null  and insectResistance != ''"> and insect_resistance = #{insectResistance}</if>
+            <if test="growthVigor != null  and growthVigor != ''"> and growth_vigor = #{growthVigor}</if>
+            <if test="pestControlMeasures != null  and pestControlMeasures != ''"> and pest_control_measures = #{pestControlMeasures}</if>
+            <if test="originId != null "> and origin_id = #{originId}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysVarietyByVarietyId" parameterType="Long" resultMap="SysVarietyResult">
+        <include refid="selectSysVarietyVo"/>
+        where variety_id = #{varietyId}
+    </select>
+
+    <insert id="insertSysVariety" parameterType="SysVariety" useGeneratedKeys="true" keyProperty="varietyId">
+        insert into sys_variety
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="varietyName != null and varietyName != ''">variety_name,</if>
+            <if test="scientificName != null">scientific_name,</if>
+            <if test="varietyType != null">variety_type,</if>
+            <if test="breedingYear != null">breeding_year,</if>
+            <if test="fruitShape != null">fruit_shape,</if>
+            <if test="fruitSize != null">fruit_size,</if>
+            <if test="averageWeight != null">average_weight,</if>
+            <if test="skinColor != null">skin_color,</if>
+            <if test="diseaseResistance != null">disease_resistance,</if>
+            <if test="insectResistance != null">insect_resistance,</if>
+            <if test="growthVigor != null">growth_vigor,</if>
+            <if test="pestControlMeasures != null">pest_control_measures,</if>
+            <if test="originId != null">origin_id,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="varietyName != null and varietyName != ''">#{varietyName},</if>
+            <if test="scientificName != null">#{scientificName},</if>
+            <if test="varietyType != null">#{varietyType},</if>
+            <if test="breedingYear != null">#{breedingYear},</if>
+            <if test="fruitShape != null">#{fruitShape},</if>
+            <if test="fruitSize != null">#{fruitSize},</if>
+            <if test="averageWeight != null">#{averageWeight},</if>
+            <if test="skinColor != null">#{skinColor},</if>
+            <if test="diseaseResistance != null">#{diseaseResistance},</if>
+            <if test="insectResistance != null">#{insectResistance},</if>
+            <if test="growthVigor != null">#{growthVigor},</if>
+            <if test="pestControlMeasures != null">#{pestControlMeasures},</if>
+            <if test="originId != null">#{originId},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysVariety" parameterType="SysVariety">
+        update sys_variety
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="varietyName != null and varietyName != ''">variety_name = #{varietyName},</if>
+            <if test="scientificName != null">scientific_name = #{scientificName},</if>
+            <if test="varietyType != null">variety_type = #{varietyType},</if>
+            <if test="breedingYear != null">breeding_year = #{breedingYear},</if>
+            <if test="fruitShape != null">fruit_shape = #{fruitShape},</if>
+            <if test="fruitSize != null">fruit_size = #{fruitSize},</if>
+            <if test="averageWeight != null">average_weight = #{averageWeight},</if>
+            <if test="skinColor != null">skin_color = #{skinColor},</if>
+            <if test="diseaseResistance != null">disease_resistance = #{diseaseResistance},</if>
+            <if test="insectResistance != null">insect_resistance = #{insectResistance},</if>
+            <if test="growthVigor != null">growth_vigor = #{growthVigor},</if>
+            <if test="pestControlMeasures != null">pest_control_measures = #{pestControlMeasures},</if>
+            <if test="originId != null">origin_id = #{originId},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where variety_id = #{varietyId}
+    </update>
+
+    <delete id="deleteSysVarietyByVarietyId" parameterType="Long">
+        delete from sys_variety where variety_id = #{varietyId}
+    </delete>
+
+    <delete id="deleteSysVarietyByVarietyIds" parameterType="String">
+        delete from sys_variety where variety_id in 
+        <foreach item="varietyId" collection="array" open="(" separator="," close=")">
+            #{varietyId}
+        </foreach>
+    </delete>
+</mapper>
