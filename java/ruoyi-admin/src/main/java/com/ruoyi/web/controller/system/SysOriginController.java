@@ -2,6 +2,9 @@ package com.ruoyi.web.controller.system;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import com.ruoyi.system.domain.SysVariety;
+import com.ruoyi.system.service.ISysVarietyService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,6 +36,9 @@ public class SysOriginController extends BaseController
 {
     @Autowired
     private ISysOriginService sysOriginService;
+
+    @Autowired
+    private ISysVarietyService sysVarietyService;
 
     /**
      * 查询猕猴桃产地信息列表
@@ -99,6 +105,14 @@ public class SysOriginController extends BaseController
 	@DeleteMapping("/{originIds}")
     public AjaxResult remove(@PathVariable Long[] originIds)
     {
+        for (Long originId : originIds){
+            SysVariety sysVariety = new SysVariety();
+            sysVariety.setOriginId(originId);
+            List<SysVariety> sysVarieties = sysVarietyService.selectSysVarietyList(sysVariety);
+            if (!sysVarieties.isEmpty()){
+                return error("数据被应用，不允许删除");
+            }
+        }
         return toAjax(sysOriginService.deleteSysOriginByOriginIds(originIds));
     }
 }

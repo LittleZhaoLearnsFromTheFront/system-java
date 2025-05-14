@@ -47,7 +47,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="insectResistance != null  and insectResistance != ''"> and insect_resistance = #{insectResistance}</if>
             <if test="growthVigor != null  and growthVigor != ''"> and growth_vigor = #{growthVigor}</if>
             <if test="pestControlMeasures != null  and pestControlMeasures != ''"> and pest_control_measures = #{pestControlMeasures}</if>
-            <if test="originId != null "> and origin_id = #{originId}</if>
+            <if test="originId != null "> and sys_variety.origin_id = #{originId}</if>
         </where>
     </select>
     
