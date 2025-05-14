@@ -33,7 +33,7 @@
     <el-table v-loading="loading" :data="inventoryList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="肥料名" align="center" prop="title" />
-      <el-table-column label="数量" align="center" prop="quantity" />
+      <el-table-column label="总数量" align="center" prop="quantity" />
       <el-table-column label="剩余数量" align="center" prop="remainingQuantity" />
       <el-table-column label="单位" align="center" prop="unit" />
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
@@ -66,7 +66,7 @@
         <el-form-item label="肥料名" prop="title">
           <el-input v-model="form.title" placeholder="请输入肥料名" />
         </el-form-item>
-        <el-form-item label="数量" prop="quantity">
+        <el-form-item label="总数量" prop="quantity">
           <el-input v-model="form.quantity" type="number" placeholder="请输入数量" :disabled="form.id" />
         </el-form-item>
         <el-form-item label="单位" prop="unit">

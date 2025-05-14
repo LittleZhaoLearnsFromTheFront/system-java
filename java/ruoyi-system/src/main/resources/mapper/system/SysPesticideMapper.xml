@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.SysPesticideMapper">
+    
+    <resultMap type="SysPesticide" id="SysPesticideResult">
+        <result property="id"    column="id"    />
+        <result property="landId"    column="land_id"    />
+        <result property="landName"    column="land_name"    />
+        <result property="pesticideInventoryId"    column="pesticide_inventory_id"    />
+        <result property="pesticideInventoryName"    column="pesticide_inventory_name"    />
+        <result property="unit"    column="unit"    />
+        <result property="owner"    column="owner"    />
+        <result property="time"    column="time"    />
+        <result property="dosage"    column="dosage"    />
+        <result property="remark"    column="remark"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="createBy"    column="create_by"    />
+    </resultMap>
+
+    <sql id="selectSysPesticideVo">
+        select a.id, a.land_id, b.name as land_name,a.owner, a.time, a.dosage, a.remark, a.pesticide_inventory_id,c.title as pesticide_inventory_name,c.unit, a.create_time, a.update_time, a.create_by from sys_pesticide a
+        LEFT JOIN sys_land b ON a.land_id=b.id
+        LEFT JOIN sys_pesticide_inventory c ON a.pesticide_inventory_id=c.id
+    </sql>
+
+    <select id="selectSysPesticideList" parameterType="SysPesticide" resultMap="SysPesticideResult">
+        <include refid="selectSysPesticideVo"/>
+        <where>  
+            <if test="landId != null "> and land_id = #{landId}</if>
+            <if test="owner != null  and owner != ''"> and owner like concat('%', #{owner}, '%')</if>
+            <if test="time != null "> and time = #{time}</if>
+            <if test="dosage != null "> and dosage = #{dosage}</if>
+            <if test="pesticideInventoryId != null "> and pesticide_inventory_id = #{pesticideInventoryId}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysPesticideById" parameterType="Long" resultMap="SysPesticideResult">
+        <include refid="selectSysPesticideVo"/>
+        where a.id = #{id}
+    </select>
+
+    <insert id="insertSysPesticide" parameterType="SysPesticide" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_pesticide
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="landId != null">land_id,</if>
+            <if test="owner != null and owner != ''">owner,</if>
+            <if test="time != null">time,</if>
+            <if test="dosage != null">dosage,</if>
+            <if test="remark != null">remark,</if>
+            <if test="pesticideInventoryId != null">pesticide_inventory_id,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="createBy != null">create_by,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="landId != null">#{landId},</if>
+            <if test="owner != null and owner != ''">#{owner},</if>
+            <if test="time != null">#{time},</if>
+            <if test="dosage != null">#{dosage},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="pesticideInventoryId != null">#{pesticideInventoryId},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysPesticide" parameterType="SysPesticide">
+        update sys_pesticide
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="landId != null">land_id = #{landId},</if>
+            <if test="owner != null and owner != ''">owner = #{owner},</if>
+            <if test="time != null">time = #{time},</if>
+            <if test="dosage != null">dosage = #{dosage},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="pesticideInventoryId != null">pesticide_inventory_id = #{pesticideInventoryId},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSysPesticideById" parameterType="Long">
+        delete from sys_pesticide where id = #{id}
+    </delete>
+
+    <delete id="deleteSysPesticideByIds" parameterType="String">
+        delete from sys_pesticide where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

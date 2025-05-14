@@ -4,8 +4,11 @@
       <el-form-item label="土地" prop="landId">
         <LandSelect v-model="queryParams.landId" />
       </el-form-item>
-      <el-form-item label="施肥人" prop="owner">
-        <el-input v-model="queryParams.owner" placeholder="请输入施肥人" clearable @keyup.enter.native="handleQuery" />
+      <el-form-item label="用药人" prop="owner">
+        <el-input v-model="queryParams.owner" placeholder="请输入用药人" clearable @keyup.enter.native="handleQuery" />
+      </el-form-item>
+      <el-form-item label="农药" prop="pesticideInventoryId">
+        <PesticideInventorySelect v-model="queryParams.pesticideInventoryId" />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -16,28 +19,35 @@
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
         <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="handleAdd"
-          v-hasPermi="['system:fertilization:add']">新增</el-button>
+          v-hasPermi="['system:pesticide:add']">新增</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button type="success" plain icon="el-icon-edit" size="mini" :disabled="single" @click="handleUpdate"
-          v-hasPermi="['system:fertilization:edit']">修改</el-button>
+          v-hasPermi="['system:pesticide:edit']">修改</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button type="danger" plain icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete"
-          v-hasPermi="['system:fertilization:remove']">删除</el-button>
+          v-hasPermi="['system:pesticide:remove']">删除</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button type="warning" plain icon="el-icon-download" size="mini" @click="handleExport"
-          v-hasPermi="['system:fertilization:export']">导出</el-button>
+          v-hasPermi="['system:pesticide:export']">导出</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="fertilizationList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="pesticideList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="土地" align="center" prop="landName" />
-      <el-table-column label="施肥人" align="center" prop="owner" />
-      <el-table-column label="施肥时间" align="center" prop="time" />
+      <el-table-column label="用药人" align="center" prop="owner" />
+      <el-table-column label="用药时间" align="center" prop="time" width="180">
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.time, '{y}-{m}-{d} {h}:{i}:{s}') }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="农药" align="center" prop="pesticideInventoryName"></el-table-column>
+      <el-table-column label="用量" align="center" prop="dosage" />
+      <el-table-column label="备注" align="center" prop="remark" />
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d} {h}:{i}:{s}') }}</span>
@@ -48,19 +58,12 @@
           <span>{{ parseTime(scope.row.updateTime, '{y}-{m}-{d} {h}:{i}:{s}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="肥料" align="center" prop="fertilizationInventoryName"></el-table-column>
-      <el-table-column label="用量" align="center" prop="dosage">
-        <template slot-scope="scope">
-          <span>{{ scope.row.dosage }} {{ scope.row.unit }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="备注" align="center" prop="remark" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:fertilization:edit']">修改</el-button>
+            v-hasPermi="['system:pesticide:edit']">修改</el-button>
           <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
-            v-hasPermi="['system:fertilization:remove']">删除</el-button>
+            v-hasPermi="['system:pesticide:remove']">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -68,28 +71,30 @@
     <pagination v-show="total > 0" :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize"
       @pagination="getList" />
 
-    <!-- 添加或修改施肥对话框 -->
+    <!-- 添加或修改治理用药管理对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="土地" prop="landId">
           <LandSelect v-model="form.landId" :disabled="form.id" />
         </el-form-item>
-        <el-form-item label="施肥人" prop="owner">
-          <el-input v-model="form.owner" placeholder="请输入施肥人" />
+        <el-form-item label="用药人" prop="owner">
+          <el-input v-model="form.owner" placeholder="请输入用药人" />
         </el-form-item>
-        <el-form-item label="施肥时间" prop="time">
-          <el-date-picker v-model="form.time" type="datetime" placeholder="请选择施肥时间"
-            value-format="yyyy-MM-dd HH:mm:ss" />
+        <el-form-item label="农药" prop="pesticideInventoryId">
+          <PesticideInventorySelect v-model="form.pesticideInventoryId" :disabled="form.id" />
         </el-form-item>
-        <el-form-item label="肥料" prop="fertilizationInventoryId">
-          <FertilizerSelect v-model="form.fertilizationInventoryId" :disabled="form.id" />
+        <el-form-item label="用药时间" prop="time">
+          <el-date-picker clearable v-model="form.time" type="datetime" value-format="yyyy-MM-dd HH:mm:ss"
+            placeholder="请选择用药时间">
+          </el-date-picker>
         </el-form-item>
         <el-form-item label="用量" prop="dosage">
-          <el-input v-model="form.dosage" type="number" placeholder="请输入用量" :disabled="form.id" />
+          <el-input v-model="form.dosage" placeholder="请输入用量" type="number" :disabled="form.id" />
         </el-form-item>
         <el-form-item label="备注" prop="remark">
           <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
         </el-form-item>
+
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -100,14 +105,14 @@
 </template>
 
 <script>
-import { listFertilization, getFertilization, delFertilization, addFertilization, updateFertilization } from "@/api/system/fertilization"
+import { listPesticide, getPesticide, delPesticide, addPesticide, updatePesticide } from "@/api/system/pesticide"
 import LandSelect from "@/components/Land/index.vue"
-import FertilizerSelect from "@/components/Fertilization/index.vue"
+import PesticideInventorySelect from "@/components/Pinventory/index.vue"
 export default {
-  name: "Fertilization",
+  name: "Pesticide",
   components: {
     LandSelect,
-    FertilizerSelect
+    PesticideInventorySelect
   },
   data() {
     return {
@@ -123,8 +128,8 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // 施肥表格数据
-      fertilizationList: [],
+      // 治理用药管理表格数据
+      pesticideList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -137,25 +142,26 @@ export default {
         owner: null,
         time: null,
         dosage: null,
+        pesticideInventoryId: null,
       },
       // 表单参数
       form: {},
       // 表单校验
       rules: {
         landId: [
-          { required: true, message: "土地id不能为空", trigger: "blur" }
-        ],
-        fertilizationInventoryId: [
-          { required: true, message: "肥料id不能为空", trigger: "blur" }
+          { required: true, message: "土地Id不能为空", trigger: "blur" }
         ],
         owner: [
-          { required: true, message: "施肥人不能为空", trigger: "blur" }
+          { required: true, message: "用药人不能为空", trigger: "blur" }
         ],
         time: [
-          { required: true, message: "施肥时间不能为空", trigger: "blur" }
+          { required: true, message: "用药时间不能为空", trigger: "blur" }
         ],
         dosage: [
           { required: true, message: "用量不能为空", trigger: "blur" }
+        ],
+        pesticideInventoryId: [
+          { required: true, message: "农药id不能为空", trigger: "blur" }
         ],
       }
     }
@@ -164,11 +170,11 @@ export default {
     this.getList()
   },
   methods: {
-    /** 查询施肥列表 */
+    /** 查询治理用药管理列表 */
     getList() {
       this.loading = true
-      listFertilization(this.queryParams).then(response => {
-        this.fertilizationList = response.rows
+      listPesticide(this.queryParams).then(response => {
+        this.pesticideList = response.rows
         this.total = response.total
         this.loading = false
       })
@@ -185,11 +191,12 @@ export default {
         landId: null,
         owner: null,
         time: null,
+        dosage: null,
+        remark: null,
+        pesticideInventoryId: null,
         createTime: null,
         updateTime: null,
-        createBy: null,
-        dosage: null,
-        remark: null
+        createBy: null
       }
       this.resetForm("form")
     },
@@ -213,16 +220,16 @@ export default {
     handleAdd() {
       this.reset()
       this.open = true
-      this.title = "添加施肥"
+      this.title = "添加治理用药管理"
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset()
       const id = row.id || this.ids
-      getFertilization(id).then(response => {
+      getPesticide(id).then(response => {
         this.form = response.data
         this.open = true
-        this.title = "修改施肥"
+        this.title = "修改治理用药管理"
       })
     },
     /** 提交按钮 */
@@ -230,13 +237,13 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.id != null) {
-            updateFertilization(this.form).then(response => {
+            updatePesticide(this.form).then(response => {
               this.$modal.msgSuccess("修改成功")
               this.open = false
               this.getList()
             })
           } else {
-            addFertilization(this.form).then(response => {
+            addPesticide(this.form).then(response => {
               this.$modal.msgSuccess("新增成功")
               this.open = false
               this.getList()
@@ -248,8 +255,8 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids
-      this.$modal.confirm('是否确认删除施肥编号为"' + ids + '"的数据项？').then(function () {
-        return delFertilization(ids)
+      this.$modal.confirm('是否确认删除治理用药管理编号为"' + ids + '"的数据项？').then(function () {
+        return delPesticide(ids)
       }).then(() => {
         this.getList()
         this.$modal.msgSuccess("删除成功")
@@ -257,9 +264,9 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('system/fertilization/export', {
+      this.download('system/pesticide/export', {
         ...this.queryParams
-      }, `fertilization_${new Date().getTime()}.xlsx`)
+      }, `pesticide_${new Date().getTime()}.xlsx`)
     }
   }
 }
