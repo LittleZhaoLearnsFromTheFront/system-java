@@ -10,9 +10,11 @@
         <module name="ruoyi-framework" />
         <module name="ruoyi-generator" />
         <module name="ruoyi-system" />
-        <module name="ruoyi-quartz" />
         <module name="ruoyi-admin" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="ruoyi-quartz" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
 </project>
