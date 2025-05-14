@@ -2,30 +2,16 @@
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="产地名称" prop="originName">
-        <el-input
-          v-model="queryParams.originName"
-          placeholder="请输入产地名称"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+        <el-input v-model="queryParams.originName" placeholder="请输入产地名称" clearable @keyup.enter.native="handleQuery" />
       </el-form-item>
       <el-form-item label="行政区划代码" prop="regionCode">
-        <el-input
-          v-model="queryParams.regionCode"
-          placeholder="请输入行政区划代码"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+        <el-input v-model="queryParams.regionCode" placeholder="请输入行政区划代码" clearable
+          @keyup.enter.native="handleQuery" />
       </el-form-item>
       <el-form-item label="气候带" prop="climateZone">
-        <el-input
-          v-model="queryParams.climateZone"
-          placeholder="请输入气候带"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+        <el-input v-model="queryParams.climateZone" placeholder="请输入气候带" clearable @keyup.enter.native="handleQuery" />
       </el-form-item>
-      
+
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -34,46 +20,20 @@
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['system:origin:add']"
-        >新增</el-button>
+        <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="handleAdd"
+          v-hasPermi="['system:origin:add']">新增</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['system:origin:edit']"
-        >修改</el-button>
+        <el-button type="success" plain icon="el-icon-edit" size="mini" :disabled="single" @click="handleUpdate"
+          v-hasPermi="['system:origin:edit']">修改</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['system:origin:remove']"
-        >删除</el-button>
+        <el-button type="danger" plain icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete"
+          v-hasPermi="['system:origin:remove']">删除</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-          v-hasPermi="['system:origin:export']"
-        >导出</el-button>
+        <el-button type="warning" plain icon="el-icon-download" size="mini" @click="handleExport"
+          v-hasPermi="['system:origin:export']">导出</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
@@ -111,31 +71,16 @@
       <el-table-column label="备注" align="center" prop="remark" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:origin:edit']"
-          >修改</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['system:origin:remove']"
-          >删除</el-button>
+          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
+            v-hasPermi="['system:origin:edit']">修改</el-button>
+          <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
+            v-hasPermi="['system:origin:remove']">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
-    
-    <pagination
-      v-show="total>0"
-      :total="total"
-      :page.sync="queryParams.pageNum"
-      :limit.sync="queryParams.pageSize"
-      @pagination="getList"
-    />
+
+    <pagination v-show="total > 0" :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize"
+      @pagination="getList" />
 
     <!-- 添加或修改猕猴桃产地信息对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
@@ -162,11 +107,11 @@
           <el-input v-model="form.slope" placeholder="请输入坡度(度)" />
         </el-form-item>
         <el-form-item label="地形类型" prop="terrainType">
-          <el-select v-model="queryParams.terrainType" placeholder="请选择地形类型">
-            <el-option label="平原" value="1"></el-option>
-            <el-option label="丘陵" value="2"></el-option>
-            <el-option label="山地" value="3"></el-option>
-            <el-option label="高原" value="4"></el-option>
+          <el-select v-model="form.terrainType" placeholder="请选择地形类型">
+            <el-option label="平原" :value="1"></el-option>
+            <el-option label="丘陵" :value="2"></el-option>
+            <el-option label="山地" :value="3"></el-option>
+            <el-option label="高原" :value="4"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="种植面积(亩)" prop="acreage">
@@ -317,7 +262,7 @@ export default {
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.originId)
-      this.single = selection.length!==1
+      this.single = selection.length !== 1
       this.multiple = !selection.length
     },
     /** 新增按钮操作 */
@@ -359,12 +304,12 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const originIds = row.originId || this.ids
-      this.$modal.confirm('是否确认删除猕猴桃产地信息编号为"' + originIds + '"的数据项？').then(function() {
+      this.$modal.confirm('是否确认删除猕猴桃产地信息编号为"' + originIds + '"的数据项？').then(function () {
         return delOrigin(originIds)
       }).then(() => {
         this.getList()
         this.$modal.msgSuccess("删除成功")
-      }).catch(() => {})
+      }).catch(() => { })
     },
     /** 导出按钮操作 */
     handleExport() {

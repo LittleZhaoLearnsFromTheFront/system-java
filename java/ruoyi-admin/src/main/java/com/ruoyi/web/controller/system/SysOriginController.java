@@ -3,6 +3,7 @@ package com.ruoyi.web.controller.system;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ruoyi.system.domain.SysLand;
 import com.ruoyi.system.domain.SysVariety;
 import com.ruoyi.system.service.ISysVarietyService;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -39,7 +40,10 @@ public class SysOriginController extends BaseController
 
     @Autowired
     private ISysVarietyService sysVarietyService;
-
+    @GetMapping("/list/all")
+    public AjaxResult listAll(SysOrigin sysOrigin){
+        return success(sysOriginService.selectSysOriginList(sysOrigin));
+    }
     /**
      * 查询猕猴桃产地信息列表
      */

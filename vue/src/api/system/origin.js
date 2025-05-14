@@ -1,5 +1,11 @@
 import request from '@/utils/request'
 
+export function getOriginListAll() {
+  return request({
+    url: '/system/origin/list/all',
+    method: 'get'
+  })
+}
 // 查询猕猴桃产地信息列表
 export function listOrigin(query) {
   return request({

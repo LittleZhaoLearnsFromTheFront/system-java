@@ -161,8 +161,8 @@
         <el-form-item label="病虫害防治措施" prop="pestControlMeasures">
           <el-input v-model="form.pestControlMeasures" placeholder="请输入病虫害防治措施" />
         </el-form-item>
-        <el-form-item label="适宜产地id" prop="originId">
-          <el-input v-model="form.originId" placeholder="请输入适宜产地id" />
+        <el-form-item label="适宜产地" prop="originId">
+          <OriginSelect v-model="form.originId" placeholder="请选择适宜产地" />
         </el-form-item>
         <el-form-item label="备注" prop="remark">
           <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
@@ -178,9 +178,12 @@
 
 <script>
 import { listVariety, getVariety, delVariety, addVariety, updateVariety } from "@/api/system/variety"
-
+import OriginSelect from "@/components/Origin/index.vue"  
 export default {
   name: "Variety",
+  components: {
+    OriginSelect
+  },
   data() {
     return {
       // 遮罩层

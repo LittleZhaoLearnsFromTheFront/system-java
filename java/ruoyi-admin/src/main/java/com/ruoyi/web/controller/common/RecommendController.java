@@ -54,7 +54,7 @@ public class RecommendController {
                 }
             }
         }
-        Collections.reverse(recommendDTOS);
+//        Collections.reverse(recommendDTOS);
         return ResponseEntity.ok(recommendDTOS);
     }
 }
