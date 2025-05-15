@@ -9,6 +9,7 @@
     </option>
     <option name="ignoredFiles">
       <set>
+        <option value="$PROJECT_DIR$/java/ruoyi-generator/pom.xml" />
         <option value="$PROJECT_DIR$/java/ruoyi-quartz/pom.xml" />
       </set>
     </option>

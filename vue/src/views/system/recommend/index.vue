@@ -49,14 +49,6 @@
             <el-table-column label="生长势" align="center" prop="growthVigor" />
             <el-table-column label="病虫害防治措施" align="center" prop="pestControlMeasures" />
             <el-table-column label="备注" align="center" prop="remark" />
-            <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-                <template slot-scope="scope">
-                    <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
-                        v-hasPermi="['system:variety:edit']">修改</el-button>
-                    <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
-                        v-hasPermi="['system:variety:remove']">删除</el-button>
-                </template>
-            </el-table-column>
         </el-table>
     </div>
 </template>
